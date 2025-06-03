@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AR Powered E-Learning Dashboard</title>
+        <style>
+            :root {
+                --primary-color: #5eb7a9;
+                --secondary-color: #7cc3b7;
+                --accent-color: #3d7b72;
+                --text-color: #333333;
+                --light-color: #ffffff;
+                --highlight-color: #ffc107;
+                --danger-color: #dc3545;
+                --success-color: #28a745;
+                --border-color: #dee2e6;
+                --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+    
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            
+            body {
+                background-color: #f8f0f0;
+                color: var(--text-color);
+            }
+            
+            .container {
+                display: flex;
+                min-height: calc(100vh - 60px);
+            }
+            
+            /* Header Styles */
+            .header {
+                background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+                color: var(--light-color);
+                text-align: center;
+                padding: 15px;
+                width: 100%;
+                font-weight: bold;
+                font-size: 24px;
+                box-shadow: var(--shadow);
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+    
+            .header-logo {
+                position: absolute;
+                left: 20px;
+                height: 40px;
+                width: 40px;
+                background-color: var(--light-color);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--primary-color);
+                font-weight: bold;
+                font-size: 20px;
+            }
+            
+            /* Sidebar Styles */
+            .sidebar {
+                width: 250px;
+                background: linear-gradient(to bottom, var(--secondary-color), var(--primary-color));
+                padding: 20px;
+                transition: all 0.3s ease;
+                border-right: 1px solid var(--border-color);
+                position: relative;
+                box-shadow: var(--shadow);
+                z-index: 10;
+            }
+            
+            .sidebar.collapsed {
+                width: 70px;
+            }
+            
+            .sidebar-toggle {
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                background: var(--light-color);
+                border: none;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                font-size: 18px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: var(--shadow);
+            }
+            
+            .profile-section {
+                text-align: center;
+                margin-bottom: 30px;
+                transition: all 0.3s ease;
+            }
+    
+            .sidebar.collapsed .profile-section {
+                transform: scale(0.6);
+                margin-bottom: 40px;
+            }
+            
+            .profile-pic {
+                width: 120px;
+                height: 120px;
+                margin: 0 auto 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 3px solid var(--light-color);
+                border-radius: 10px;
+                padding: 5px;
+                background-color: var(--light-color);
+                box-shadow: var(--shadow);
+                overflow: hidden;
+            }
+            
+            .profile-pic svg {
+                width: 100%;
+                height: 100%;
+            }
+            
+            .profile-name {
+                font-weight: bold;
+                color: var(--light-color);
+                margin-bottom: 5px;
+                transition: opacity 0.3s ease;
+            }
+    
+            .sidebar.collapsed .profile-name {
+                opacity: 0;
+            }
+    
+            .user-level {
+                color: var(--light-color);
+                background-color: var(--accent-color);
+                padding: 2px 8px;
+                border-radius: 10px;
+                font-size: 12px;
+                display: inline-block;
+                transition: opacity 0.3s ease;
+            }
+    
+            .sidebar.collapsed .user-level {
+                opacity: 0;
+            }
+            
+            .sidebar-menu {
+                list-style: none;
+            }
+            
+            .sidebar-menu li {
+                margin-bottom: 10px;
+            }
+            
+            .menu-item {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                padding: 12px 15px;
+                background-color: rgba(255, 255, 255, 0.9);
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+                text-transform: uppercase;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                color: var(--text-color);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+    
+            .menu-item.active {
+                background-color: var(--accent-color);
+                color: var(--light-color);
+            }
+            
+            .menu-item:hover {
+                background-color: var(--accent-color);
+                color: var(--light-color);
+                transform: translateY(-2px);
+            }
+    
+            .menu-icon {
+                margin-right: 15px;
+                font-size: 18px;
+                min-width: 20px;
+                text-align: center;
+            }
+    
+            .sidebar.collapsed .menu-text {
+                display: none;
+            }
+    
+            .sidebar.collapsed .menu-item {
+                justify-content: center;
+                padding: 12px;
+            }
+    
+            .sidebar.collapsed .menu-icon {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .help-button {
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 10px 20px;
+                background-color: var(--light-color);
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                font-weight: bold;
+                color: var(--accent-color);
+                box-shadow: var(--shadow);
+                transition: all 0.3s ease;
+                width: 80%;
+            }
+    
+            .sidebar.collapsed .help-button {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+    
+            .sidebar.collapsed .help-text {
+                display: none;
+            }
+            
+            .help-button:hover {
+                background-color: var(--accent-color);
+                color: var(--light-color);
+            }
+            
+            .help-button:after {
+                content: "";
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                margin-left: -10px;
+                border-width: 10px 10px 0;
+                border-style: solid;
+                border-color: var(--light-color) transparent;
+                transition: all 0.3s ease;
+            }
+    
+            .help-button:hover:after {
+                border-color: var(--accent-color) transparent;
+            }
+    
+            .sidebar.collapsed .help-button:after {
+                display: none;
+            }
+            
+            /* Main Content */
+            .main-content {
+                flex: 1;
+                background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+                padding: 20px;
+                transition: all 0.3s ease;
+                overflow-y: auto;
+                max-height: calc(100vh - 60px);
+            }
+            
+            .dashboard-header {
+                display: flex;
+                justify-content: space-between;
+                padding-bottom: 20px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
+            
+            .user-greeting {
+                font-weight: bold;
+                font-size: 22px;
+                color: var(--accent-color);
+            }
+            
+            .time-date {
+                display: flex;
+                background-color: rgba(255, 255, 255, 0.6);
+                padding: 5px 15px;
+                border-radius: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            
+            .time-date div {
+                margin-left: 20px;
+                font-weight: 500;
+            }
+    
+            .time-label, .date-label {
+                font-weight: bold;
+                color: var(--accent-color);
+                margin-right: 5px;
+            }
+            
+            .user-info {
+                text-align: right;
+                background-color: rgba(255, 255, 255, 0.6);
+                padding: 5px 15px;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+    
+            .username {
+                font-weight: bold;
+                color: var(--accent-color);
+            }
+    
+            .last-login {
+                font-size: 14px;
+                color: #666;
+            }
+            
+            /* Learning Progress Section */
+            .learning-progress {
+                background-color: var(--light-color);
+                border-radius: 15px;
+                padding: 20px;
+                margin-top: 20px;
+                display: flex;
+                justify-content: space-between;
+                box-shadow: var(--shadow);
+            }
+            
+            .progress-title {
+                color: var(--accent-color);
+                margin-bottom: 15px;
+                font-size: 18px;
+                font-weight: bold;
+            }
+    
+            .module-progress {
+                flex: 2;
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
+                padding: 15px;
+                position: relative;
+                background-color: rgba(255, 255, 255, 0.8);
+                box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+            
+            .module-name {
+                font-weight: bold;
+                color: var(--accent-color);
+                margin-bottom: 10px;
+            }
+            
+            .progress-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+    
+            .progress-bar {
+                flex: 1;
+                height: 10px;
+                background-color: #e9ecef;
+                border-radius: 5px;
+                margin-right: 20px;
+                overflow: hidden;
+            }
+    
+            .progress-bar-fill {
+                height: 100%;
+                background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+                width: 50%;
+                border-radius: 5px;
+            }
+            
+            .progress-cylinder {
+                width: 60px;
+                height: 80px;
+                border: 2px solid var(--accent-color);
+                border-radius: 30px 30px 0 0;
+                position: relative;
+                overflow: hidden;
+                background-color: rgba(255, 255, 255, 0.8);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            
+            .progress-fill {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 50%;
+                background: linear-gradient(to top, var(--primary-color), var(--accent-color));
+            }
+            
+            .progress-text {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-weight: bold;
+                color: var(--accent-color);
+            }
+            
+            .next-module {
+                flex: 1;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                margin-left: 20px;
+            }
+            
+            .next-module-header {
+                border: 1px solid var(--border-color);
+                padding: 10px;
+                font-weight: bold;
+                border-radius: 10px;
+                background-color: rgba(255, 255, 255, 0.8);
+                color: var(--accent-color);
+            }
+    
+            .resume-btn {
+                padding: 12px;
+                background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: bold;
+                color: var(--light-color);
+                transition: all 0.3s ease;
+                box-shadow: var(--shadow);
+            }
+    
+            .resume-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+            
+            /* Lower Sections */
+            .lower-sections {
+                display: flex;
+                margin-top: 20px;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+            
+            .course-overview {
+                flex: 3;
+                background-color: var(--light-color);
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: var(--shadow);
+                min-width: 300px;
+            }
+            
+            .section-title {
+                color: var(--accent-color);
+                margin-bottom: 15px;
+                font-size: 18px;
+                font-weight: bold;
+                border-bottom: 2px solid var(--primary-color);
+                padding-bottom: 5px;
+            }
+            
+            .module-list {
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
+                padding: 15px;
+                background-color: rgba(255, 255, 255, 0.8);
+            }
+            
+            .module-btn {
+                width: 100%;
+                padding: 12px 15px;
+                margin-bottom: 10px;
+                background-color: rgba(255, 255, 255, 0.9);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+                text-align: left;
+                transition: all 0.3s ease;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    
+            .module-btn:last-child {
+                margin-bottom: 0;
+            }
+            
+            .module-btn:hover {
+                background-color: var(--primary-color);
+                color: var(--light-color);
+            }
+    
+            .module-btn.active {
+                background-color: var(--accent-color);
+                color: var(--light-color);
+            }
+    
+            .module-btn i {
+                font-size: 16px;
+            }
+            
+            .right-column {
+                flex: 2;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                min-width: 250px;
+            }
+            
+            .achievements {
+                background-color: var(--light-color);
+                border-radius: 15px;
+                padding: 20px;
+                flex: 2;
+                box-shadow: var(--shadow);
+            }
+    
+            .achievement-items {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+    
+            .achievement-badge {
+                width: 80px;
+                height: 80px;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid var(--border-color);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                color: #888;
+                font-size: 12px;
+                text-align: center;
+                overflow: hidden;
+                position: relative;
+            }
+    
+            .achievement-badge.earned {
+                border-color: var(--highlight-color);
+                color: var(--accent-color);
+                background-color: rgba(255, 252, 220, 0.8);
+            }
+    
+            .achievement-badge i {
+                font-size: 24px;
+            }
+    
+            .badge-tooltip {
+                position: absolute;
+                bottom: -30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: var(--accent-color);
+                color: var(--light-color);
+                padding: 3px 8px;
+                border-radius: 5px;
+                font-size: 10px;
+                opacity: 0;
+                transition: all 0.3s ease;
+                width: 100px;
+                text-align: center;
+                pointer-events: none;
+            }
+    
+            .achievement-badge:hover .badge-tooltip {
+                bottom: -25px;
+                opacity: 1;
+            }
+            
+            .ar-help {
+                background-color: var(--light-color);
+                border-radius: 15px;
+                padding: 20px;
+                flex: 1;
+                box-shadow: var(--shadow);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: var(--accent-color);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                background: linear-gradient(45deg, var(--light-color) 0%, rgba(94, 183, 169, 0.2) 100%);
+            }
+    
+            .ar-help:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+    
+            .ar-help i {
+                margin-right: 10px;
+                font-size: 24px;
+            }
+    
+            /* Profile Page Styles */
+            .profile-page {
+                display: none; /* Hidden by default */
+            }
+    
+            .profile-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 30px;
+            }
+    
+            .profile-header-pic {
+                width: 150px;
+                height: 150px;
+                border-radius: 15px;
+                overflow: hidden;
+                border: 4px solid var(--light-color);
+                box-shadow: var(--shadow);
+                margin-right: 30px;
+                background-color: var(--light-color);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+    
+            .profile-header-pic svg {
+                width: 100%;
+                height: 100%;
+            }
+    
+            .profile-header-info h2 {
+                color: var(--accent-color);
+                margin-bottom: 10px;
+            }
+    
+            .profile-stats {
+                display: flex;
+                margin-bottom: 15px;
+            }
+    
+            .stat-item {
+                margin-right: 30px;
+                text-align: center;
+            }
+    
+            .stat-value {
+                font-size: 24px;
+                font-weight: bold;
+                color: var(--accent-color);
+            }
+    
+            .stat-label {
+                font-size: 14px;
+                color: #666;
+            }
+    
+            .profile-bio {
+                color: #555;
+                margin-bottom: 10px;
+            }
+    
+            .edit-profile-btn {
+                background-color: var(--primary-color);
+                color: var(--light-color);
+                border: none;
+                padding: 8px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: all 0.3s ease;
+            }
+    
+            .edit-profile-btn:hover {
+                background-color: var(--accent-color);
+            }
+    
+            .profile-content {
+                display: flex;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+    
+            .form-row {
+                display: flex;
+                margin-bottom: 15px;
+                gap: 20px;
+            }
+    
+            .form-group {
+                flex: 1;
+            }
+    
+            .form-label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 500;
+                color: #555;
+            }
+    
+            .form-control {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid var(--border-color);
+                border-radius: 5px;
+                font-size: 14px;
+            }
+    
+            .form-control:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 2px rgba(94, 183, 169, 0.2);
+            }
+    
+            /* Additional pages can be styled as needed */
+    
+            /* Responsive Design */
+            @media (max-width: 992px) {
+                .learning-progress {
+                    flex-direction: column;
+                }
+                
+                .next-module {
+                    margin-left: 0;
+                    margin-top: 20px;
+                }
+                
+                .lower-sections {
+                    flex-direction: column;
+                }
+                
+                .right-column {
+                    width: 100%;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .sidebar {
+                    position: fixed;
+                    height: 100%;
+                    z-index: 1000;
+                    transform: translateX(-100%);
+                }
+                
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+                
+                .sidebar-toggle {
+                    right: -40px;
+                    background-color: var(--primary-color);
+                    color: var(--light-color);
+                }
+                
+                .dashboard-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                
+                .time-date, .user-info {
+                    margin-top: 10px;
+                }
+            }
+    
+            /* Loading animation */
+            .loader {
+                border: 5px solid #f3f3f3;
+                border-radius: 50%;
+                border-top: 5px solid var(--primary-color);
+                width: 40px;
+                height: 40px;
+                animation: spin 1s linear infinite;
+                margin: 20px auto;
+            }
+    
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+    
+            /* Toast notification */
+            .toast {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background-color: var(--success-color);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 4px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 1000;
+            }
+    
+            .toast.show {
+                opacity: 1;
+            }
+        </style>
+        <!-- Font Awesome Icons (free version) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    </head>
+<body>
+    <div class="header">
+        <div class="header-logo">AR</div>
+        DASHBOARD: AR POWERED E-LEARNING
+    </div>
+    
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="profile-section">
+                <div class="profile-pic">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="30" r="20" stroke="black" stroke-width="2" fill="#e0f2f1" />
+                        <line x1="50" y1="50" x2="50" y2="80" stroke="black" stroke-width="2" />
+                        <line x1="30" y1="60" x2="70" y2="60" stroke="black" stroke-width="2" />
+                        <line x1="50" y1="80" x2="30" y2="100" stroke="black" stroke-width="2" />
+                        <line x1="50" y1="80" x2="70" y2="100" stroke="black" stroke-width="2" />
+                    </svg>
+                </div>
+                <div class="profile-name">SAM JOHNSON</div>
+                <div class="user-level">INTERMEDIATE</div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html" class="menu-item" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt menu-icon"></i>
+                        <span class="menu-text">DASHBOARD</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_profile.html" class="menu-item" data-page="profile">
+                        <i class="fas fa-user menu-icon"></i>
+                        <span class="menu-text">PROFILE</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_course.html" class="menu-item" data-page="courses">
+                        <i class="fas fa-book menu-icon"></i>
+                        <span class="menu-text">COURSES</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_message.html" class="menu-item active" data-page="messages">
+                        <i class="fas fa-envelope menu-icon"></i>
+                        <span class="menu-text">MESSAGES</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_meetings.html" class="menu-item" data-page="meetings">
+                        <i class="fas fa-calendar-alt menu-icon"></i>
+                        <span class="menu-text">MEETINGS</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_settings.html" class="menu-item" data-page="settings">
+                        <i class="fas fa-cog menu-icon"></i>
+                        <span class="menu-text">SETTINGS</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="logout()" class="menu-item" id="signoutBtn">
+                        <i class="fas fa-sign-out-alt menu-icon"></i>
+                        <span class="menu-text">SIGNOUT</span>
+                    </a>
+                    <script src="../js/logout.js"></script> 
+                </li>
+            </ul>
+            
+            <button class="help-button">
+                <i class="fas fa-question-circle"></i>
+                <span class="help-text">HELP?</span>
+            </button>
+        </div>
+        
+        <!-- Main Content - Messages -->
+        <div class="main-content">
+            <div class="dashboard-header">
+                <div class="user-greeting">Messages</div>
+                <div class="time-date">
+                    <div class="time"><span class="time-label">TIME:</span> <span id="currentTime">--:--</span></div>
+                    <div class="date"><span class="date-label">DATE:</span> <span id="currentDate">--/--/----</span></div>
+                </div>
+                <div class="user-info">
+                    <div class="username">USER NAME: SAM JOHNSON</div>
+                    <div class="last-login">LAST LOGIN: 3 DAYS AGO</div>
+                </div>
+            </div>
+            
+            <!-- Messages Content -->
+            <div class="course-overview" style="display:flex; gap:20px;">
+                <div style="flex:1; min-width:200px;">
+                    <h3 class="section-title">CONTACTS</h3>
+                    <div class="module-list">
+                        <button class="module-btn active">
+                            <i class="fas fa-user-circle menu-icon"></i>
+                            DR. REYNOLDS (INSTRUCTOR)
+                        </button>
+                        <button class="module-btn">
+                            <i class="fas fa-user-circle menu-icon"></i>
+                            ALEX SMITH (CLASSMATE)
+                        </button>
+                        <button class="module-btn">
+                            <i class="fas fa-user-circle menu-icon"></i>
+                            TECH SUPPORT
+                        </button>
+                        <button class="module-btn">
+                            <i class="fas fa-users menu-icon"></i>
+                            AR STUDY GROUP (5)
+                        </button>
+                        <button class="module-btn">
+                            <i class="fas fa-plus-circle menu-icon"></i>
+                            ADD NEW CONTACT
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="flex:2;">
+                    <div style="background-color: var(--light-color); border-radius: 15px; padding: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; height: 500px;">
+                        <div style="display: flex; align-items: center; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
+                            <div style="width: 40px; height: 40px; background-color: var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 15px;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; color: var(--accent-color);">DR. REYNOLDS</div>
+                                <div style="font-size: 12px; color: #666;">Online now</div>
+                            </div>
+                        </div>
+                        
+                        <div style="flex: 1; overflow-y: auto; padding: 15px 0; display: flex; flex-direction: column;">
+                            <!-- Received message -->
+                            <div style="align-self: flex-start; max-width: 70%; background-color: #f1f1f1; padding: 10px 15px; border-radius: 15px 15px 15px 0; margin-bottom: 15px;">
+                                <div style="font-size: 14px;">Hello Sam, how's your progress with the AR module?</div>
+                                <div style="font-size: 10px; color: #666; text-align: right;">10:30 AM</div>
+                            </div>
+                            
+                            <!-- Sent message -->
+                            <div style="align-self: flex-end; max-width: 70%; background-color: var(--primary-color); color: white; padding: 10px 15px; border-radius: 15px 15px 0 15px; margin-bottom: 15px;">
+                                <div style="font-size: 14px;">Hi Dr. Reynolds! I'm currently at 50% completion. The interactive demos are really helpful!</div>
+                                <div style="font-size: 10px; color: rgba(255,255,255,0.7); text-align: right;">10:35 AM</div>
+                            </div>
+                            
+                            <!-- Received message -->
+                            <div style="align-self: flex-start; max-width: 70%; background-color: #f1f1f1; padding: 10px 15px; border-radius: 15px 15px 15px 0; margin-bottom: 15px;">
+                                <div style="font-size: 14px;">Great to hear! Don't forget we have a virtual lab session tomorrow at 2 PM. Make sure you have completed the prerequisite materials.</div>
+                                <div style="font-size: 10px; color: #666; text-align: right;">10:40 AM</div>
+                            </div>
+                            
+                            <!-- Sent message -->
+                            <div style="align-self: flex-end; max-width: 70%; background-color: var(--primary-color); color: white; padding: 10px 15px; border-radius: 15px 15px 0 15px; margin-bottom: 15px;">
+                                <div style="font-size: 14px;">I'll be ready for the session. Is there anything specific I should prepare?</div>
+                                <div style="font-size: 10px; color: rgba(255,255,255,0.7); text-align: right;">10:43 AM</div>
+                            </div>
+                            
+                            <!-- Received message -->
+                            <div style="align-self: flex-start; max-width: 70%; background-color: #f1f1f1; padding: 10px 15px; border-radius: 15px 15px 15px 0; margin-bottom: 15px;">
+                                <div style="font-size: 14px;">Just review the AR tracking techniques we covered in the last session. We'll be applying those concepts in a practical exercise.</div>
+                                <div style="font-size: 10px; color: #666; text-align: right;">10:45 AM</div>
+                            </div>
+                        </div>
+                        
+                        <div style="padding-top: 15px; border-top: 1px solid var(--border-color); display: flex;">
+                            <input type="text" placeholder="Type your message..." style="flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 20px; margin-right: 10px; outline: none;">
+                            <button style="background-color: var(--accent-color); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar Toggle Functionality
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        });
+        
+        
+        // Settings Sidebar Navigation
+        document.querySelectorAll('.settings-sidebar a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.settings-sidebar a').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Scroll to target section
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Signout Functionality
+        document.getElementById('signoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to sign out?')) {
+                window.location.href = 'AR_login.html';
+            }
+        });
+        
+        // Help Button Functionality
+        document.querySelector('.help-button').addEventListener('click', function() {
+            alert('Help Center: For assistance with the AR Powered E-Learning platform, please visit our Help Center or contact support at support@ar-elearning.com');
+        });
+    </script>
+    <script src="../js/authGuard.js"></script>
+</body>
+</html>

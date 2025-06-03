@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Powered E-Learning - Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #5eb7a9;
+            --secondary-color: #7cc3b7;
+            --accent-color: #3d7b72;
+            --text-color: #333333;
+            --light-color: #ffffff;
+            --highlight-color: #ffc107;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --input-bg: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f0f0;
+            color: var(--text-color);
+        }
+        
+        .container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            color: var(--light-color);
+            text-align: center;
+            padding: 15px;
+            width: 100%;
+            font-weight: bold;
+            font-size: 24px;
+            box-shadow: var(--shadow);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .header-logo {
+            position: absolute;
+            left: 20px;
+            height: 40px;
+            width: 40px;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, var(--secondary-color), var(--primary-color));
+            padding: 20px;
+            transition: all 0.3s ease;
+            border-right: 1px solid var(--border-color);
+            position: relative;
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+        
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        
+        .sidebar-toggle {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: var(--light-color);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .profile-section {
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed .profile-section {
+            transform: scale(0.6);
+            margin-bottom: 40px;
+        }
+        
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid var(--light-color);
+            border-radius: 10px;
+            padding: 5px;
+            background-color: var(--light-color);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .profile-pic svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .profile-name {
+            font-weight: bold;
+            color: var(--light-color);
+            margin-bottom: 5px;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed .profile-name {
+            opacity: 0;
+        }
+
+        .user-level {
+            color: var(--light-color);
+            background-color: var(--accent-color);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            display: inline-block;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed .user-level {
+            opacity: 0;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item.active {
+            background-color: var(--accent-color);
+            color: var(--light-color);
+        }
+        
+        .menu-item:hover {
+            background-color: var(--accent-color);
+            color: var(--light-color);
+            transform: translateY(-2px);
+        }
+
+        .menu-icon {
+            margin-right: 15px;
+            font-size: 18px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar.collapsed .menu-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .menu-item {
+            justify-content: center;
+            padding: 12px;
+        }
+
+        .sidebar.collapsed .menu-icon {
+            margin-right: 0;
+            font-size: 20px;
+        }
+        
+        .help-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: var(--light-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--accent-color);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            width: 80%;
+        }
+
+        .sidebar.collapsed .help-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .help-text {
+            display: none;
+        }
+        
+        .help-button:hover {
+            background-color: var(--accent-color);
+            color: var(--light-color);
+        }
+        
+        .help-button:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            margin-left: -10px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: var(--light-color) transparent;
+            transition: all 0.3s ease;
+        }
+
+        .help-button:hover:after {
+            border-color: var(--accent-color) transparent;
+        }
+
+        .sidebar.collapsed .help-button:after {
+            display: none;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+            padding: 20px;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            max-height: calc(100vh - 60px);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .breadcrumb {
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .breadcrumb a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--primary-color);
+        }
+        
+        .breadcrumb .separator {
+            margin: 0 10px;
+            color: #888;
+        }
+        
+        .breadcrumb .current {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        /* Settings Page Specific Styles */
+        .settings-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .settings-sidebar {
+            background-color: var(--light-color);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            flex: 0 0 250px;
+        }
+
+        .settings-sidebar ul {
+            list-style: none;
+        }
+
+        .settings-sidebar li {
+            margin-bottom: 5px;
+        }
+
+        .settings-sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .settings-sidebar a:hover {
+            background-color: rgba(94, 183, 169, 0.1);
+        }
+
+        .settings-sidebar a.active {
+            background-color: rgba(94, 183, 169, 0.2);
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .sidebar-icon {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .settings-content {
+            background-color: var(--light-color);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+        }
+
+        .settings-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-title {
+            color: var(--accent-color);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .setting-item {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .setting-item-column {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .setting-label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .setting-description {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Select Styles */
+        .setting-select {
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            min-width: 150px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            gap: 15px;
+        }
+        
+        .button {
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: var(--shadow);
+        }
+        
+        .primary-button {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+        }
+        
+        .primary-button:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .secondary-button {
+            background-color: #e9ecef;
+            color: var(--text-color);
+        }
+
+        .danger-button {
+            background-color: var(--danger-color);
+            color: var(--light-color);
+        }
+        
+        .secondary-button:hover, .danger-button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* Media Queries */
+        @media (max-width: 992px) {
+            .settings-container {
+                flex-direction: column;
+            }
+            
+            .settings-sidebar {
+                flex: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                height: 100%;
+                z-index: 1000;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .sidebar-toggle {
+                right: -40px;
+                background-color: var(--primary-color);
+                color: var(--light-color);
+            }
+            
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .setting-control {
+                margin-top: 10px;
+                width: 100%;
+            }
+            
+            .setting-select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-logo">AR</div>
+        DASHBOARD: AR POWERED E-LEARNING
+    </div>
+    
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="profile-section">
+                <div class="profile-pic">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="30" r="20" stroke="black" stroke-width="2" fill="#e0f2f1" />
+                        <line x1="50" y1="50" x2="50" y2="80" stroke="black" stroke-width="2" />
+                        <line x1="30" y1="60" x2="70" y2="60" stroke="black" stroke-width="2" />
+                        <line x1="50" y1="80" x2="30" y2="100" stroke="black" stroke-width="2" />
+                        <line x1="50" y1="80" x2="70" y2="100" stroke="black" stroke-width="2" />
+                    </svg>
+                </div>
+                <div class="profile-name">SAM JOHNSON</div>
+                <div class="user-level">INTERMEDIATE</div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html" class="menu-item" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt menu-icon"></i>
+                        <span class="menu-text">DASHBOARD</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_profile.html" class="menu-item" data-page="profile">
+                        <i class="fas fa-user menu-icon"></i>
+                        <span class="menu-text">PROFILE</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_course.html" class="menu-item" data-page="courses">
+                        <i class="fas fa-book menu-icon"></i>
+                        <span class="menu-text">COURSES</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_message.html" class="menu-item" data-page="messages">
+                        <i class="fas fa-envelope menu-icon"></i>
+                        <span class="menu-text">MESSAGES</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_meetings.html" class="menu-item" data-page="meetings">
+                        <i class="fas fa-calendar-alt menu-icon"></i>
+                        <span class="menu-text">MEETINGS</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_settings.html" class="menu-item active" data-page="settings">
+                        <i class="fas fa-cog menu-icon"></i>
+                        <span class="menu-text">SETTINGS</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="AR_signout.html" class="menu-item" id="signoutBtn">
+                        <i class="fas fa-sign-out-alt menu-icon"></i>
+                        <span class="menu-text">SIGNOUT</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <button class="help-button">
+                <i class="fas fa-question-circle"></i>
+                <span class="help-text">HELP?</span>
+            </button>
+        </div>
+        
+        <!-- Main Content - Settings Page -->
+        <div class="main-content">
+            <div class="page-header">
+                <div class="page-title">Settings</div>
+                <div class="breadcrumb">
+                    <a href="index.html">Dashboard</a>
+                    <span class="separator">/</span>
+                    <span class="current">Settings</span>
+                </div>
+            </div>
+            
+            <!-- Settings Content -->
+            <div class="settings-container">
+                <!-- Settings Sidebar -->
+                <div class="settings-sidebar">
+                    <ul>
+                        <li>
+                            <a href="#account" class="active">
+                                <i class="fas fa-user-circle sidebar-icon"></i>
+                                Account Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#privacy">
+                                <i class="fas fa-shield-alt sidebar-icon"></i>
+                                Privacy & Security
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#notifications">
+                                <i class="fas fa-bell sidebar-icon"></i>
+                                Notifications
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ar-settings">
+                                <i class="fas fa-vr-cardboard sidebar-icon"></i>
+                                AR Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#appearance">
+                                <i class="fas fa-palette sidebar-icon"></i>
+                                Appearance
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#learning">
+                                <i class="fas fa-graduation-cap sidebar-icon"></i>
+                                Learning Preferences
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#billing">
+                                <i class="fas fa-credit-card sidebar-icon"></i>
+                                Billing & Subscription
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#accessibility">
+                                <i class="fas fa-universal-access sidebar-icon"></i>
+                                Accessibility
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Settings Content -->
+                <div class="settings-content">
+                    <!-- Account Settings Section -->
+                    <div class="settings-section" id="account">
+                        <h3 class="settings-title">Account Settings</h3>
+                        
+                        <div class="setting-item-column">
+                            <div class="setting-label">Email Address</div>
+                            <div class="setting-description">The email address used for login and notifications</div>
+                            <input type="email" class="info-value" value="sam.johnson@example.com">
+                        </div>
+                        
+                        <div class="setting-item-column">
+                            <div class="setting-label">Password</div>
+                            <div class="setting-description">Change your password regularly to keep your account secure</div>
+                            <button class="button secondary-button" style="margin-top: 10px; width: 180px;">
+                                <i class="fas fa-key"></i> Change Password
+                            </button>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Two-Factor Authentication</div>
+                                <div class="setting-description">Add an extra layer of security to your account</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Stay Logged In</div>
+                                <div class="setting-description">Keep me logged in on this device</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Language</div>
+                                <div class="setting-description">Set your preferred language for the platform</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="en">English</option>
+                                    <option value="es">Filipino</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="zh">Chinese</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Privacy & Security Section -->
+                    <div class="settings-section" id="privacy">
+                        <h3 class="settings-title">Privacy & Security</h3>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Profile Visibility</div>
+                                <div class="setting-description">Control who can see your profile information</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="public">Public</option>
+                                    <option value="friends">Connections Only</option>
+                                    <option value="private" selected>Private</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Learning Activity</div>
+                                <div class="setting-description">Share your learning progress with other users</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="public">Public</option>
+                                    <option value="friends" selected>Connections Only</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Data Collection</div>
+                                <div class="setting-description">Allow us to collect usage data to improve your experience</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Session History</div>
+                                <div class="setting-description">Keep a record of your learning sessions</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item-column">
+                            <div class="setting-label">Active Sessions</div>
+                            <div class="setting-description">View and manage your active sessions across devices</div>
+                            <button class="button secondary-button" style="margin-top: 10px; width: 180px;">
+                                <i class="fas fa-desktop"></i> Manage Sessions
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Notifications Section -->
+                    <div class="settings-section" id="notifications">
+                        <h3 class="settings-title">Notifications</h3>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Email Notifications</div>
+                                <div class="setting-description">Receive notifications via email</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Push Notifications</div>
+                                <div class="setting-description">Receive notifications on your device</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Course Updates</div>
+                                <div class="setting-description">Get notified about updates to your enrolled courses</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Assignment Reminders</div>
+                                <div class="setting-description">Get reminded about upcoming assignments and deadlines</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Message Notifications</div>
+                                <div class="setting-description">Get notified when you receive new messages</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Achievement Alerts</div>
+                                <div class="setting-description">Get notified when you earn badges or achievements</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AR Settings Section -->
+                    <div class="settings-section" id="ar-settings">
+                        <h3 class="settings-title">AR Settings</h3>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">AR Experience Quality</div>
+                                <div class="setting-description">Set the quality level of AR experiences based on your device capabilities</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="low">Low (Better Performance)</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High (Better Quality)</option>
+                                    <option value="ultra">Ultra (High-end Devices)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Auto Object Recognition</div>
+                                <div class="setting-description">Automatically detect objects in your environment for interactive learning</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">3D Model Detail</div>
+                                <div class="setting-description">Set the level of detail for 3D models in AR experiences</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">AR Audio Experience</div>
+                                <div class="setting-description">Enable spatial audio for immersive AR learning experiences</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">AR Learning Guides</div>
+                                <div class="setting-description">Show interactive guides during AR experiences</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Camera Access</div>
+                                <div class="setting-description">Allow the application to access your camera for AR functionality</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Appearance Section -->
+                    <div class="settings-section" id="appearance">
+                        <h3 class="settings-title">Appearance</h3>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Theme</div>
+                                <div class="setting-description">Choose your preferred color theme</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="default" selected>Teal (Default)</option>
+                                    <option value="dark">Dark Mode</option>
+                                    <option value="light">Light Mode</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="purple">Purple</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Font Size</div>
+                                <div class="setting-description">Adjust the text size throughout the application</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="small">Small</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="large">Large</option>
+                                    <option value="xlarge">Extra Large</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Compact View</div>
+                                <div class="setting-description">Show more content with less spacing</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Animations</div>
+                                <div class="setting-description">Enable or disable UI animations</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Learning Preferences Section -->
+                    <div class="settings-section" id="learning">
+                        <h3 class="settings-title">Learning Preferences</h3>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Learning Pace</div>
+                                <div class="setting-description">Set your preferred pace for course progression</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="relaxed">Relaxed</option>
+                                    <option value="moderate" selected>Moderate</option>
+                                    <option value="intensive">Intensive</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Content Difficulty</div>
+                                <div class="setting-description">Adjust the difficulty level of learning materials</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="beginner">Beginner</option>
+                                    <option value="intermediate" selected>Intermediate</option>
+                                    <option value="advanced">Advanced</option>
+                                    <option value="expert">Expert</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Learning Focus Areas</div>
+                                <div class="setting-description">Customize your areas of interest for personalized content</div>
+                            </div>
+                            <div class="setting-control">
+                                <button class="button secondary-button">
+                                    <i class="fas fa-sliders-h"></i> Customize
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Quiz Frequency</div>
+                                <div class="setting-description">How often you'd like to be quizzed on materials</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="rarely">Rarely</option>
+                                    <option value="occasionally">Occasionally</option>
+                                    <option value="frequently" selected>Frequently</option>
+                                    <option value="very-frequently">Very Frequently</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Content Format Preference</div>
+                                <div class="setting-description">Choose your preferred learning content format</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="setting-select">
+                                    <option value="balanced" selected>Balanced</option>
+                                    <option value="video-focus">Video Focus</option>
+                                    <option value="reading-focus">Reading Focus</option>
+                                    <option value="interactive-focus">Interactive Focus</option>
+                                    <option value="ar-focus">AR/VR Focus</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Billing & Subscription Section -->
+                    <div class="settings-section" id="billing">
+                        <h3 class="settings-title">Billing & Subscription</h3>
+                        
+                        <div class="setting-item-column">
+                            <div class="setting-label">Current Plan</div>
+                            <div class="setting-description">You are currently on the <strong>Pro Plan</strong></div>
+                            <div style="margin-top: 10px; display: flex; gap: 15px;">
+                                <button class="button primary-button">
+                                    <i class="fas fa-arrow-up"></i> Upgrade Plan
+                                </button>
+                                <button class="button secondary-button">
+                                    <i class="fas fa-info-circle"></i> Plan Details
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item-column">
+                            <div class="setting-label">Payment Method</div>
+                            <div class="setting-description">Manage your payment methods</div>
+                            <div style="margin-top: 10px; background: var(--input-bg); padding: 10px; border-radius: 5px; border: 1px solid var(--border-color);">
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div>
+                                        <i class="far fa-credit-card"></i> Ending in 4242
+                                    </div>
+                                    <div>
+                                        <button class="button secondary-button" style="padding: 5px 10px; font-size: 12px;">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="button secondary-button" style="margin-top: 10px;">
+                                <i class="fas fa-plus"></i> Add Payment Method
+                            </button>
+                        </div>
+                        
+                        <div class="setting-item-column">
+                            <div class="setting-label">Billing History</div>
+                            <div class="setting-description">View your past invoices and payment history</div>
+                            <button class="button secondary-button" style="margin-top: 10px;">
+                                <i class="fas fa-history"></i> View Billing History
+                            </button>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Auto-Renew Subscription</div>
+                                <div class="setting-description">Automatically renew your subscription when it expires</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Accessibility Section -->
+                    <div class="settings-section" id="accessibility">
+                        <h3 class="settings-title">Accessibility</h3>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Screen Reader Support</div>
+                                <div class="setting-description">Optimize interface for screen readers</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">High Contrast Mode</div>
+                                <div class="setting-description">Enhance visual contrast for better readability</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Motion Reduction</div>
+                                <div class="setting-description">Reduce motion effects throughout the interface</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Caption Preferences</div>
+                                <div class="setting-description">Customize caption appearance for videos</div>
+                            </div>
+                            <div class="setting-control">
+                                <button class="button secondary-button">
+                                    <i class="fas fa-closed-captioning"></i> Customize
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Text-to-Speech</div>
+                                <div class="setting-description">Enable text-to-speech functionality</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Save Button Section -->
+                    <div class="button-group">
+                        <button class="button danger-button" id="resetSettings">
+                            <i class="fas fa-undo"></i> Reset to Default
+                        </button>
+                        <button class="button primary-button" id="saveSettings">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Settings saved successfully!</div>
+    
+    <script>
+        // Sidebar Toggle Functionality
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        });
+        
+        // Save Settings Button Functionality
+        document.getElementById('saveSettings').addEventListener('click', function() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 3000);
+        });
+        
+        // Settings Sidebar Navigation
+        document.querySelectorAll('.settings-sidebar a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.settings-sidebar a').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Scroll to target section
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Signout Functionality
+        document.getElementById('signoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to sign out?')) {
+                window.location.href = 'AR_login.html';
+            }
+        });
+        
+        // Help Button Functionality
+        document.querySelector('.help-button').addEventListener('click', function() {
+            alert('Help Center: For assistance with the AR Powered E-Learning platform, please visit our Help Center or contact support at support@ar-elearning.com')
+        });
+    </script>
+    <script src="../js/authGuard.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In - AR E-Learning</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f8; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .login-container { background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 360px; }
+    .login-container h1 { margin-bottom: 24px; font-size: 24px; color: #333333; text-align: center; }
+    .login-container label { display: block; margin-bottom: 8px; color: #555555; font-weight: 600; }
+    .login-container input { width: 100%; padding: 10px; margin-bottom: 16px; border: 1px solid #cccccc; border-radius: 4px; }
+    .login-container button { width: 100%; padding: 12px; background: #005f99; color: #ffffff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+    .login-container button:hover { background: #004a7c; }
+    .error { color: #dc3545; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>DOST Dashboard: AR E-Learning Login</h1>
+    <form id="loginForm">
+      <label for="username">Username</label>
+      <input type="text" id="username" required />
+      <label for="password">Password</label>
+      <input type="password" id="password" required />
+      <button type="submit">Sign In</button>
+      <p id="errorMsg" class="error"></p>
+    </form>
+  </div>
+  <script src="../js/login.js"></script>
+</body>
+</html>
